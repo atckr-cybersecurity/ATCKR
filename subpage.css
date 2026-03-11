@@ -1,0 +1,202 @@
+/* ATCKR CONTACT PAGE */
+
+body{
+    font-family: "Share Tech Mono", monospace;
+    background:black;
+    color:#00FF00;
+    margin:0;
+}
+
+/* HEADER */
+
+header{
+    background:#111;
+    border-bottom:2px solid #52d63a;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    height:120px;
+}
+
+nav ul{
+    display:flex;
+    gap:30px;
+    list-style:none;
+}
+
+nav a{
+    text-decoration:none;
+    color:white;
+}
+
+nav a:hover{
+    color:#52d63a;
+}
+
+/* PAGE TITLE */
+
+.page-title{
+    text-align:center;
+    margin-top:40px;
+    font-size:40px;
+}
+
+/* INTRO TEXT */
+
+.contact-intro{
+    text-align:center;
+    max-width:800px;
+    margin:20px auto 40px auto;
+}
+
+/* CONTACT CARDS */
+
+.contact-content{
+    text-align:center;
+}
+
+.contact-info{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    margin-top:20px;
+}
+
+.contact-card{
+    border:1px solid #52d63a;
+    padding:25px;
+    width:260px;
+    border-radius:10px;
+    background:#111;
+    transition:0.3s;
+}
+
+.contact-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 0 12px #52d63a;
+}
+
+/* CONTACT FORM */
+
+.contact-section{
+    margin-top:60px;
+    text-align:center;
+}
+
+.contact-form{
+    max-width:500px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+}
+
+.contact-form label{
+    margin-top:15px;
+    text-align:left;
+}
+
+.contact-form input,
+.contact-form textarea{
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #52d63a;
+    background:black;
+    color:white;
+}
+
+.contact-form button{
+    margin-top:20px;
+    padding:14px;
+    background:#52d63a;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.contact-form button:hover{
+    box-shadow:0 0 10px #52d63a;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:80px;
+    background:#111;
+    padding:25px;
+    text-align:center;
+}
+/* popup modal */
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    }
+    
+    .modal-content{
+    background:black;
+    color:#00FF00;
+    border:2px solid #52d63a;
+    padding:30px;
+    width:400px;
+    margin:10% auto;
+    text-align:center;
+    border-radius:10px;
+    }
+    
+    .modal-content textarea,
+    .modal-content select{
+    width:100%;
+    padding:8px;
+    margin-top:10px;
+    background:black;
+    color:white;
+    border:1px solid #52d63a;
+    }
+    
+    .modal-content button{
+    margin-top:15px;
+    padding:10px 20px;
+    background:#52d63a;
+    border:none;
+    cursor:pointer;
+    }
+
+    /* animations for fading */
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* FADE UP */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+ 
