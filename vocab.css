@@ -1,0 +1,228 @@
+/* This is for the ATCKR vocab page! */
+
+
+
+/* reset styles */
+article, body, div, footer, header, main h1, h2, h3, h4, nav, img, ul, li, p {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+  font-family: "Share Tech Mono", monospace;
+    line-height: 1.6;
+    color: #00FF00;
+    background-color: #0A0A0A;
+}
+
+/* this is the header section */
+header {
+    background: #0a0a0a;
+    border-bottom: 2px solid #526d3a;
+}
+main{
+    background-image: url("gif.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    animation: fadeDown 1s ease forwards;
+}
+
+.logo {
+    height: 150px;
+   grid-column: 1;
+   justify-self: left; 
+}
+
+nav {
+    grid-column: 3;
+    justify-self: end; 
+}
+
+nav ul {
+  display: flex;
+  gap: 35px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-family: "Share Tech Mono", monospace;
+
+}
+
+nav a:hover {
+    color: #52d63a;
+}
+
+/* vocab section */
+
+
+.vocab-section {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    gap: 40px;
+    color: white;
+}
+
+.vocab-card {
+    display: inline-block;
+    vertical-align: top;
+    width: 28%;
+    margin: 15px;
+    padding: 20px;
+    background-color: #0a0a0a;
+    border: 1px solid #52d63a;
+    border-radius: 12px;
+    text-align: left;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(82, 214, 58, 0.1);
+}
+
+.vocab-card h2 {
+    color: #52d63a;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.vocab-card p {
+    color: #d6d6d6;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+/* navigation section (usage of transitions/animations here) */
+nav.site-navigation {
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+nav.site-navigation li {
+    display: inline-block;
+    margin: 0 15px;
+    text-align: center;
+}
+
+nav.site-navigation li:hover {
+    -ms-transform: scale(1.4);
+    transform: scale(1.4);
+}
+
+nav.site-navigation a:link {
+    text-decoration: none;
+    color: #333;
+}
+
+nav.site-navigation a:visited {
+    color: darkgray;
+}
+
+nav.site-navigation a:hover, nav.site-navigation a:focus {
+    color: #333;  
+    text-shadow: 1px -1px 0 black; /* displays a black shadow when hovering around the navigation page. */
+}
+
+nav.site-navigation a:active {
+    position: relative;
+    top: 1px;
+    left: 1px;
+}
+
+/* skip navigation features */
+.skip-navigation {
+    position: absolute;
+    left: -10000px;
+}
+
+p.skip-navigation a:focus {
+    left: 20px;
+    top: 0.4em;
+    background: white;
+    padding: 0;
+    color: #e63946;
+    text-decoration: none;
+}
+
+
+/* footer */
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    background-color: #111;
+    color: #888;
+}
+
+.contacts {
+    
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #555;
+}
+
+/* responsive web design for mobile devices only! */
+@media print {
+    .container, h1, h2, p {
+        color: black;
+        background-color: lightgrey;
+    }
+    
+    .site-navigation ul {
+        flex-direction: column;
+        gap: 1em;
+    }
+    
+    *nav {
+        display: none;
+    }
+}
+/* animations for fading */
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* FADE UP */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+ 
