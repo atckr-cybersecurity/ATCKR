@@ -1,45 +1,74 @@
 /* ATCKR CONTACT PAGE */
 
-body{
-    font-family: "Share Tech Mono", monospace;
-    background:black;
-    color:#00FF00;
-    margin:0;
+article, body, div, footer, header, main h1, h2, h3, h4, nav, img, ul, li, p {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 
-/* HEADER */
-
-header{
-    background:#111;
-    border-bottom:2px solid #52d63a;
+body {
+  font-family: "Share Tech Mono", monospace;
+    line-height: 1.6;
+    color: #00FF00;
+    background-color: #0A0A0A;
 }
 
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+/* this is the header section */
+header {
+    background: #0a0a0a;
+    border-bottom: 2px solid #526d3a;
+}
+main{
+    background-image: url("gif.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
 }
 
-.logo{
-    height:120px;
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    animation: fadeDown 1s ease forwards;
 }
 
-nav ul{
-    display:flex;
-    gap:30px;
-    list-style:none;
+.logo {
+    height: 150px;
+   grid-column: 1;
+   justify-self: left; 
 }
 
-nav a{
-    text-decoration:none;
-    color:white;
+nav {
+    grid-column: 3;
+    justify-self: end; 
 }
 
-nav a:hover{
-    color:#52d63a;
+nav ul {
+  display: flex;
+  gap: 35px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-family: "Share Tech Mono", monospace;
+
+}
+
+nav a:hover {
+    color: #52d63a;
 }
 
 /* PAGE TITLE */
