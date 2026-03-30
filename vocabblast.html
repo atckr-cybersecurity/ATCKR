@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATCKR — Vocab Blast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../CSS/game3.css" />
+</head>
+<body>
+
+  <!-- Particle starfield (same as game1 & game2) -->
+  <canvas id="particles"></canvas>
+
+  <!-- Combo streak popup -->
+  <div id="combo"></div>
+
+
+  <!-- ====================================================
+       SCREEN 1: INTRO
+  ==================================================== -->
+  <section class="screen active" id="s-intro">
+    <div class="intro-badge">ATCKR · Game 3 of 3</div>
+    <div class="intro-icon">💻</div>
+    <h1 class="intro-title">Vocab Blast!</h1>
+    <p class="intro-sub">A vocab word appears at the bottom. Shoot the virus that shows its correct definition!</p>
+
+    <div class="intro-cards">
+      <div class="intro-card">
+        <span class="ic-e">📖</span>
+        <div class="ic-t">Read the Word</div>
+        <div class="ic-d">A cybersecurity term appears at the bottom of the screen.</div>
+      </div>
+      <div class="intro-card">
+        <span class="ic-e">🎯</span>
+        <div class="ic-t">Find the Definition</div>
+        <div class="ic-d">Multiple virus bubbles fall from above — only one has the right definition.</div>
+      </div>
+      <div class="intro-card">
+        <span class="ic-e">💥</span>
+        <div class="ic-t">Blast It!</div>
+        <div class="ic-d">Move left/right and press Space to shoot. Hit the correct definition to score!</div>
+      </div>
+      <div class="intro-card">
+        <span class="ic-e">⚠️</span>
+        <div class="ic-t">Watch Out!</div>
+        <div class="ic-d">Hitting the wrong virus or letting the right one escape costs you a life.</div>
+      </div>
+    </div>
+
+    <div class="intro-controls">
+      <div class="ctrl-pill"><span class="ctrl-key">← →</span> Move</div>
+      <div class="ctrl-pill"><span class="ctrl-key">SPACE</span> Shoot</div>
+      <div class="ctrl-pill"><span class="ctrl-key">↑</span> Also fires</div>
+    </div>
+
+    <button class="btn-start" onclick="startGame()">▶ Start Game</button>
+  </section>
+
+
+  <!-- ====================================================
+       SCREEN 2: GAME
+  ==================================================== -->
+  <section class="screen" id="s-game">
+
+    <div id="hud">
+      <span class="hud-title">💻 Vocab Blast</span>
+      <div class="hud-stat">❤️ <span id="vbLives">3</span></div>
+      <div class="hud-stat">⭐ <span id="vbScore">0</span></div>
+      <div class="hud-stat">✅ <span id="vbCorrect">0</span>/<span id="vbTotal">9</span></div>
+      <div class="hud-stat">🌊 Round <span id="vbRound">1</span></div>
+      <span id="vbStreak"></span>
+    </div>
+
+    <div id="canvas-wrap">
+      <canvas id="gameCanvas"></canvas>
+      <div id="word-prompt">
+        <div id="prompt-label">▸ SHOOT THE DEFINITION OF ◂</div>
+        <div id="prompt-word">—</div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ====================================================
+       SCREEN 3: RESULTS
+  ==================================================== -->
+  <section class="screen" id="s-results">
+    <div class="res-trophy" id="resTrophy">🏆</div>
+    <h2 class="res-title"  id="resTitle">VOCAB MASTER!</h2>
+    <p  class="res-sub"    id="resSub">You know your cybersecurity terms!</p>
+    <div class="res-score" id="resScore">0 pts</div>
+    <div class="res-stars" id="resStars">⭐⭐⭐</div>
+
+    <div class="res-breakdown">
+      <div class="bd-cell"><span class="bd-val" id="bdCorrect">0</span><span class="bd-lbl">Correct Blasts</span></div>
+      <div class="bd-cell"><span class="bd-val" id="bdMissed">0</span><span class="bd-lbl">Missed</span></div>
+      <div class="bd-cell"><span class="bd-val" id="bdBest">0x</span><span class="bd-lbl">Best Streak</span></div>
+      <div class="bd-cell"><span class="bd-val" id="bdBonus">+0</span><span class="bd-lbl">Streak Bonus</span></div>
+    </div>
+
+    <div class="res-btns">
+      <button class="res-btn primary"   onclick="goHome()">🏠 Back to Hub</button>
+      <button class="res-btn secondary" onclick="startGame()">↺ Play Again</button>
+    </div>
+  </section>
+
+
+  <!-- game3.js loads after the DOM so all elements exist -->
+  <script src="../games/game3.js"></script>
+
+</body>
+</html>

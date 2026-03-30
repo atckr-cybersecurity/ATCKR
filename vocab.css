@@ -77,11 +77,10 @@ nav a:hover {
 /* vocab section */
 
 
-.vocab-section {
-    width: 90%;
+.vocab{
+    max-width: 900px;
     margin: 0 auto;
     text-align: center;
-    gap: 40px;
     color: white;
 }
 
