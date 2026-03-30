@@ -1,0 +1,489 @@
+/* =====================================================
+   ATCKR — Vocab Blast (Game 3)
+   Stylesheet: game3.css
+   Description: All styles for the intro, game,
+   and results screens, animations, HUD, canvas
+   layout, and word prompt bar.
+===================================================== */
+
+
+/* -------------------------------------------------------
+   CSS VARIABLES & RESET
+------------------------------------------------------- */
+:root {
+  --bg:     #060d14;
+  --panel:  #0a1828;
+  --panel2: #0d1f33;
+  --border: rgba(0, 229, 255, 0.15);
+  --accent: #00e5ff;
+  --green:  #39ff14;
+  --red:    #ff4757;
+  --yellow: #ffd32a;
+  --muted:  #4a7a99;
+  --text:   #e0f7fa;
+  --fw:   'Fredoka One', cursive;
+  --fn:   'Nunito', sans-serif;
+  --mono: 'Share Tech Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fn);
+  overflow: hidden;
+}
+
+
+/* -------------------------------------------------------
+   KEYFRAME ANIMATIONS
+------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chipPop {
+  from { opacity: 0; transform: translateX(-50%) scale(0.8); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes comboGo {
+  0%   { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-55px) scale(0.8); }
+}
+
+@keyframes confettiFall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%,  100% { box-shadow: 0 0 0 0    rgba(0, 229, 255, 0.5); }
+  50%        { box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); }
+}
+
+@keyframes wrongShake {
+  0%,  100% { transform: translateX(0); }
+  20%, 60%  { transform: translateX(-7px); }
+  40%, 80%  { transform: translateX(7px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+
+/* -------------------------------------------------------
+   SCANLINE OVERLAY — subtle retro CRT effect
+------------------------------------------------------- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.04) 0px,
+    rgba(0, 0, 0, 0.04) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+
+/* -------------------------------------------------------
+   SCREEN SYSTEM
+   Same showScreen() pattern as game1 & game2.
+------------------------------------------------------- */
+.screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow-y: auto;
+}
+
+.screen.active {
+  display: flex;
+}
+
+
+/* -------------------------------------------------------
+   PARTICLE BACKGROUND CANVAS
+------------------------------------------------------- */
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* -------------------------------------------------------
+   INTRO SCREEN  (#s-intro)
+------------------------------------------------------- */
+#s-intro {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  gap: 0;
+}
+
+.intro-badge {
+  font-family: var(--fw);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+  animation: fadeIn 0.5s ease both;
+  text-transform: uppercase;
+}
+
+.intro-icon {
+  font-size: 4.5rem;
+  animation: fadeIn 0.5s 0.05s ease both;
+  filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5));
+}
+
+.intro-title {
+  font-family: var(--fw);
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  color: var(--accent);
+  text-shadow: 0 0 28px rgba(0, 229, 255, 0.7);
+  animation: fadeIn 0.5s 0.1s ease both;
+  margin: 10px 0 4px;
+}
+
+.intro-sub {
+  font-size: 0.92rem;
+  color: var(--muted);
+  animation: fadeIn 0.5s 0.15s ease both;
+  margin-bottom: 22px;
+  text-align: center;
+  max-width: 420px;
+}
+
+/* How-to-play cards */
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 660px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s 0.2s ease both;
+}
+
+.intro-card {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 11px;
+  text-align: center;
+}
+
+.intro-card .ic-e { font-size: 1.7rem; display: block; margin-bottom: 5px; }
+.intro-card .ic-t { font-family: var(--fw); font-size: 0.8rem; color: var(--accent); margin-bottom: 3px; }
+.intro-card .ic-d { font-size: 0.66rem; color: var(--muted); line-height: 1.4; }
+
+/* Controls strip */
+.intro-controls {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 22px;
+  animation: fadeIn 0.5s 0.25s ease both;
+}
+
+.ctrl-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.ctrl-key {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+}
+
+/* Start button */
+.btn-start {
+  font-family: var(--fw);
+  font-size: 1.12rem;
+  padding: 13px 48px;
+  background: var(--accent);
+  color: #001a22;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.18s, filter 0.18s;
+  animation: fadeIn 0.5s 0.3s ease both, pulse 2s 1s infinite;
+}
+
+.btn-start:hover {
+  transform: scale(1.05);
+  filter: brightness(1.12);
+}
+
+
+/* -------------------------------------------------------
+   GAME SCREEN  (#s-game)
+------------------------------------------------------- */
+#s-game {
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HUD bar */
+#hud {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 13px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.hud-title {
+  font-family: var(--fw);
+  font-size: 1rem;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.hud-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#vbStreak {
+  font-family: var(--fw);
+  font-size: 0.88rem;
+  min-width: 46px;
+  text-align: center;
+}
+
+/* Combo popup */
+#combo {
+  position: fixed;
+  top: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--fw);
+  font-size: 1.55rem;
+  pointer-events: none;
+  z-index: 300;
+  opacity: 0;
+}
+
+#combo.go {
+  animation: comboGo 1s ease forwards;
+}
+
+/* Canvas container */
+#canvas-wrap {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Word prompt bar — overlaid at the bottom of the canvas */
+#word-prompt {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(6, 13, 20, 0.97) 65%, transparent);
+  padding: 10px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#prompt-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+#prompt-word {
+  font-family: var(--fw);
+  font-size: clamp(1.1rem, 3vw, 1.75rem);
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(0, 229, 255, 0.55);
+  text-align: center;
+}
+
+
+/* -------------------------------------------------------
+   RESULTS SCREEN  (#s-results)
+------------------------------------------------------- */
+#s-results {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  gap: 0;
+}
+
+.res-trophy {
+  font-size: 4.2rem;
+  animation: fadeIn 0.5s ease both;
+  filter: drop-shadow(0 0 18px rgba(0, 229, 255, 0.4));
+}
+
+.res-title {
+  font-family: var(--fw);
+  font-size: clamp(1.5rem, 5vw, 2.3rem);
+  color: var(--accent);
+  text-shadow: 0 0 22px rgba(0, 229, 255, 0.5);
+  animation: fadeIn 0.5s 0.05s ease both;
+  margin: 10px 0 4px;
+  text-align: center;
+}
+
+.res-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  animation: fadeIn 0.5s 0.1s ease both;
+  margin-bottom: 16px;
+  text-align: center;
+  max-width: 320px;
+}
+
+.res-score {
+  font-family: var(--fw);
+  font-size: 2.1rem;
+  background: linear-gradient(90deg, var(--accent), var(--green), var(--accent));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeIn 0.5s 0.15s ease both, shimmer 2.5s linear infinite;
+  margin-bottom: 5px;
+}
+
+.res-stars {
+  font-size: 1.75rem;
+  letter-spacing: 4px;
+  animation: fadeIn 0.5s 0.2s ease both;
+  margin-bottom: 20px;
+}
+
+/* Breakdown stat grid */
+.res-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 330px;
+  animation: fadeIn 0.5s 0.25s ease both;
+  margin-bottom: 24px;
+}
+
+.bd-cell {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 9px;
+  text-align: center;
+}
+
+.bd-cell .bd-val {
+  font-family: var(--fw);
+  font-size: 1.3rem;
+  color: var(--accent);
+  display: block;
+}
+
+.bd-cell .bd-lbl {
+  font-size: 0.63rem;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Result buttons */
+.res-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeIn 0.5s 0.3s ease both;
+}
+
+.res-btn {
+  font-family: var(--fw);
+  font-size: 0.93rem;
+  padding: 11px 24px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: transform 0.18s, filter 0.18s;
+}
+
+.res-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.12);
+}
+
+.res-btn.primary   { background: var(--accent); color: #001a22; }
+.res-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+
+
+/* -------------------------------------------------------
+   RESPONSIVE
+------------------------------------------------------- */
+@media (max-width: 480px) {
+  .hud-title { display: none; }
+}
