@@ -1,7 +1,5 @@
 /* ATCKR About Page  */
 
-
-
 /* reset styles */
 article, body, div, footer, header, main h1, h2, h3, h4, nav, img, ul, li, p {
     border: 0;
@@ -21,14 +19,7 @@ header {
     background: #0a0a0a;
     border-bottom: 2px solid #526d3a;
 }
-main{
-    background-image: url("gif.gif");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    min-height: 100vh;
-}
+/* background handled by .about section */
 
 .container {
     max-width: 1200px;
@@ -76,32 +67,133 @@ nav a:hover {
 
 /* about */
 
-.about-container {
-    max-width: 800px;   
-    margin: 0 auto;     
-    padding: 20px;
+.about {
+    background-image: url("gif.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    padding: 50px 20px 80px 20px;
 }
 
-.about-container h1 {
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
     text-align: center;
-    margin-bottom: 20px;
-} 
+}
+
+.about-container > h1 {
+    text-align: center;
+    margin-bottom: 12px;
+    color: #52d63a;
+    font-size: 2rem;
+    text-shadow: 0 0 12px rgba(82, 214, 58, 0.4);
+}
+
+.about-container > p {
+    text-align: center;
+    margin-bottom: 36px;
+    opacity: 0.85;
+    color: white;
+}
+
+/* 2x2 grid of developer cards matching the reference image */
+.developer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 600px;
+    margin: 0 auto 48px auto;
+}
+
+.developer-card {
+    border-radius: 18px;
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Four distinct colors matching the reference image */
+.developer-card:nth-child(1) { background-color: #6b7f8e; }
+.developer-card:nth-child(2) { background-color: #4aab96; }
+.developer-card:nth-child(3) { background-color: #e8b84b; }
+.developer-card:nth-child(4) { background-color: #e06060; }
+
+.developer-card h2 {
+    font-size: 1.05rem;
+    color: #fff;
+    margin: 0;
+}
+
+.developer-card h3 {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.88);
+    font-weight: normal;
+    margin: 0;
+}
+
+/* ATCKR description block */
+.description {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: left;
+    border-top: 1px solid #526d3a;
+    padding-top: 32px;
+}
+
+.description h1 {
+    margin-bottom: 14px;
+    margin-top: 0;
+    text-align: center;
+    color: #52d63a;
+    text-shadow: 0 0 12px rgba(82, 214, 58, 0.4);
+}
+
+.description h2 {
+    margin-top: 36px;
+    margin-bottom: 14px;
+    text-align: center;
+    color: #52d63a;
+    text-shadow: 0 0 12px rgba(82, 214, 58, 0.4);
+}
+
+.description p {
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
 /* footer */
-.site-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+footer {
+    background: #111;
+    padding: 25px;
     text-align: center;
-    padding: 15px;
-    background-color: #111;
-    color: #888;
+    margin-top: 0;
 }
 
 .copyright {
     text-align: center;
     padding-top: 20px;
-    margin-top: 20px;
+    margin-top: 0;
     border-top: 1px solid #555;
+    color: lightgreen;
+}
+
+.contacts {
+    margin-top: 8px;
+}
+
+.contacts a {
+    color: #52d63a;
+    text-decoration: none;
+}
+
+.contacts a:hover {
+    text-decoration: underline;
 }
 
 /* responsive web design for mobile devices only! */
