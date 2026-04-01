@@ -1087,7 +1087,7 @@ function endGame() {
 function goNext() {
   const passed = localStorage.getItem('game2_passed') === 'true';
   if (passed) {
-    window.location.href = '../games/vocabblast.html';
+    window.location.href = 'vocabblast.html';
   } else {
     showToast('💡 Survive all 5 waves to unlock Game 3!');
   }
