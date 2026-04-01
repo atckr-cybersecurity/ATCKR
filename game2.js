@@ -38,61 +38,66 @@ const G = {
 
 /* -------------------------------------------------------
    TOWER DEFINITIONS
-   Each entry mirrors the structure used throughout
-   game1.js for scenario data: named properties,
-   clear costs, and educational descriptions.
+   targets[] defines which enemy types each tower can hit:
+     firewall  → worm, phishing
+     antivirus → spyware only
+     updater   → worm, spyware
+     vpn       → ransomware only
 ------------------------------------------------------- */
 const TOWERS = {
   firewall: {
-    key:   'firewall',
-    emoji: '🧱',
-    name:  'Firewall',
-    cost:  30,
-    dmg:   20,
-    range: 2.5,   // in grid cells
-    rate:  1.5,   // shots per second
-    color: '#060606',
-    desc:  'Blocks common threats.',
-    fact:  'A firewall is like a security guard that checks every visitor on its travels to the computer.'
+    key:     'firewall',
+    emoji:   '🧱',
+    name:    'Firewall',
+    cost:    30,
+    dmg:     20,
+    range:   2.5,   // in grid cells
+    rate:    1.5,   // shots per second
+    color:   '#060606',
+    targets: ['worm', 'phishing'],
+    desc:    'Hits: 🐛 Worm · 🎣 Phishing',
+    fact:    'A firewall is like a security guard that checks every visitor on its travels to the computer.'
   },
   antivirus: {
-    key:   'antivirus',
-    emoji: '🔍',
-    name:  'Antivirus',
-    cost:  45,
-    dmg:   40,
-    range: 3.5,
-    rate:  0.7,
-    color: '#39ff14',
-    canSeeStealthy: true,
-    desc:  'Long range. Reveals hidden spyware.',
-    fact:  'Antivirus software scans every file on your computer looking for malware hiding in disguise.'
+    key:     'antivirus',
+    emoji:   '🔍',
+    name:    'Antivirus',
+    cost:    45,
+    dmg:     40,
+    range:   3.5,
+    rate:    0.7,
+    color:   '#39ff14',
+    targets: ['spyware'],            // only tower that hits spyware
+    desc:    'Hits: 🕵️ Spyware only',
+    fact:    'Antivirus software scans every file on your computer looking for malware hiding in disguise.'
   },
   updater: {
-    key:   'updater',
-    emoji: '🔄',
-    name:  'Updater',
-    cost:  50,
-    dmg:   12,
-    range: 2.2,
-    rate:  0.9,
-    slow:  0.55,   // fraction of speed enemy keeps when slowed
-    color: '#ffd32a',
-    desc:  'Slows enemies. Patches vulnerabilities.',
-    fact:  'Software updates patch security holes — outdated software is the most common way hackers get in!'
+    key:     'updater',
+    emoji:   '🔄',
+    name:    'Updater',
+    cost:    50,
+    dmg:     12,
+    range:   2.2,
+    rate:    0.9,
+    slow:    0.55,   // fraction of speed enemy keeps when slowed
+    color:   '#ffd32a',
+    targets: ['worm', 'spyware'],
+    desc:    'Hits: 🐛 Worm · 🕵️ Spyware',
+    fact:    'Software updates patch security holes — outdated software is the most common way hackers get in!'
   },
   vpn: {
-    key:   'vpn',
-    emoji: '🔐',
-    name:  'VPN Shield',
-    cost:  90,
-    dmg:   28,
-    range: 3.0,
-    rate:  0.6,
-    aoe:   true,
-    color: '#a55eea',
-    desc:  'Area blast. Weakens all nearby threats.',
-    fact:  'A VPN encrypts your internet traffic like an invisible tunnel so hackers can\'t snoop on you.'
+    key:     'vpn',
+    emoji:   '🔐',
+    name:    'VPN Shield',
+    cost:    90,
+    dmg:     28,
+    range:   3.0,
+    rate:    0.6,
+    aoe:     true,
+    color:   '#a55eea',
+    targets: ['ransomware'],         // only tower that hits ransomware
+    desc:    'Hits: 🔒 Ransomware only',
+    fact:    'A VPN encrypts your internet traffic like an invisible tunnel so hackers can\'t snoop on you.'
   }
 };
 
@@ -110,6 +115,7 @@ const ENEMIES = {
     hp:       60,
     speed:    1.9,
     reward:   10,
+    damage:   1,    // lives lost when it reaches the computer
     color:    '#ff6b35',
     stealthy: false,
     fact:     'A worm copies itself automatically and spreads to other computers over the internet!'
@@ -121,8 +127,9 @@ const ENEMIES = {
     hp:       80,
     speed:    1.1,
     reward:   18,
+    damage:   2,    // steals data silently — costs 2 lives
     color:    '#a55eea',
-    stealthy: true,   // only antivirus can target stealthy enemies
+    stealthy: true,
     fact:     'Spyware secretly watches everything you do and sends your passwords to hackers!'
   },
   ransomware: {
@@ -132,6 +139,7 @@ const ENEMIES = {
     hp:       220,
     speed:    0.7,
     reward:   30,
+    damage:   5,    // locks everything — costs 5 lives
     color:    '#ff4757',
     stealthy: false,
     fact:     'Ransomware locks all your files and demands money. Always keep backups!'
@@ -143,6 +151,7 @@ const ENEMIES = {
     hp:       110,
     speed:    1.3,
     reward:   22,
+    damage:   3,    // steals credentials — costs 3 lives
     color:    '#ffd32a',
     stealthy: false,
     fact:     'Phishing emails pretend to be from someone you trust to steal your passwords!'
@@ -160,7 +169,7 @@ const WAVES = [
   ['worm','worm','spyware','spyware','worm','worm'],
   ['phishing','phishing','worm','spyware','phishing','worm','spyware'],
   ['ransomware','worm','worm','phishing','spyware','ransomware','phishing'],
-  ['ransomware','spyware','phishing','worm','ransomware','spyware','phishing','worm','ransomware']
+  ['ransomware','spyware','phishing','worm','ransomware','spyware','phishing','worm','ransomware','spyware']
 ];
 
 
@@ -353,8 +362,8 @@ function showScreen(id) {
 ------------------------------------------------------- */
 function startGame() {
   G.score       = 0;
-  G.lives       = 20;
-  G.gold        = 150;
+  G.lives       = 15;
+  G.gold        = 100;
   G.wave        = 0;
   G.streak      = 0;
   G.best        = 0;
@@ -460,7 +469,7 @@ function placeTower(cx, cy) {
     rate:     def.rate,
     slow:     def.slow   || 0,
     aoe:      def.aoe    || false,
-    canSeeStealthy: def.canSeeStealthy || false,
+    targets:  def.targets,          // carry targets array onto the placed instance
     color:    def.color,
     cooldown: 0,
     id:       Math.random()
@@ -469,22 +478,6 @@ function placeTower(cx, cy) {
   soundPlace();
   updateHUD();
 }
-
-
-/* -------------------------------------------------------
-   TOWER SELL
-   Returns 60% of cost — same ratio as common TD games.
-   Called by the Sell button in the sidebar.
-------------------------------------------------------- */
-function sellTower() {
-  if (!G.selectedTower) return;
-  const def  = TOWERS[G.selectedTower.type];
-  G.gold    += Math.floor(def.cost * 0.6);
-  G.towers   = G.towers.filter(t => t !== G.selectedTower);
-  G.selectedTower = null;
-  updateHUD();
-}
-
 
 /* -------------------------------------------------------
    ENEMY SPAWNING
@@ -503,6 +496,7 @@ function spawnEnemy(type) {
     maxHp:    def.hp,
     speed:    def.speed,        // cells per second
     reward:   def.reward,
+    damage:   def.damage,       // lives lost when it reaches the computer
     color:    def.color,
     stealthy: def.stealthy,
     fact:     def.fact,
@@ -626,47 +620,61 @@ function update(dt) {
     } else {
       setTimeout(() => {
         if (!G.waveActive && !G.answered) {
-          sendWave()
+          sendWave();
         }
-      }, 500)
+      }, 500);
     }
   }
+
   // --- Move enemies along path ---
+  // Uses a movement-budget while-loop so fast enemies can't overshoot
+  // a corner waypoint and wander off the path.
   for (let i = G.enemies.length - 1; i >= 0; i--) {
-    const e    = G.enemies[i];
-    const spd  = (e.slowTimer > 0 ? e.speed * e.slow : e.speed) * CELL * dt;
+    const e = G.enemies[i];
     if (e.slowTimer > 0) e.slowTimer -= dt;
+    let budget = (e.slowTimer > 0 ? e.speed * e.slow : e.speed) * CELL * dt;
 
-    const nextNode = PATH[e.pathIdx + 1];
-    if (!nextNode) {
-      // Enemy reached the computer — lose a life
-      G.lives--;
-      G.streak = 0;
-      spawnParticles(e.x, e.y, '#ff4757', 12);
-      soundLeak();
-      G.enemies.splice(i, 1);
-      updateHUD();
+    let leaked = false;
+    while (budget > 0) {
+      const nextNode = PATH[e.pathIdx + 1];
 
-      if (G.lives <= 0) {
-        G.answered = true;
-        setTimeout(endGame, 600);
+      if (!nextNode) {
+        // Enemy reached the computer — lose lives equal to its damage value
+        G.lives  -= e.damage;
+        G.streak  = 0;
+        spawnParticles(e.x, e.y, '#ff4757', 12);
+        soundLeak();
+        showToast('💥 ' + e.name + ' got through! -' + e.damage + ' ' + (e.damage === 1 ? 'life' : 'lives') + '!');
+        G.enemies.splice(i, 1);
+        updateHUD();
+        if (G.lives <= 0) {
+          G.answered = true;
+          setTimeout(endGame, 600);
+        }
+        leaked = true;
+        break;
       }
-      continue;
+
+      const tp   = cellPx(nextNode.x, nextNode.y);
+      const dx   = tp.px - e.x;
+      const dy   = tp.py - e.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist <= budget) {
+        // Snap exactly onto waypoint and spend remainder on next segment
+        e.x = tp.px;
+        e.y = tp.py;
+        e.pathIdx++;
+        budget -= dist;
+      } else {
+        // Not enough budget to reach next waypoint this frame
+        e.x += (dx / dist) * budget;
+        e.y += (dy / dist) * budget;
+        budget = 0;
+      }
     }
 
-    const tp   = cellPx(nextNode.x, nextNode.y);
-    const dx   = tp.px - e.x;
-    const dy   = tp.py - e.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist <= spd + 1) {
-      e.x = tp.px;
-      e.y = tp.py;
-      e.pathIdx++;
-    } else {
-      e.x += (dx / dist) * spd;
-      e.y += (dy / dist) * spd;
-    }
+    if (leaked) continue;
   }
 
   // --- Towers shoot ---
@@ -674,9 +682,9 @@ function update(dt) {
     tower.cooldown -= dt;
     if (tower.cooldown > 0) continue;
 
-    // Find enemies in range (respecting stealth)
+    // Only target enemy types listed in this tower's targets[] array
     const inRange = G.enemies.filter(e => {
-      if (e.stealthy && !tower.canSeeStealthy) return false;
+      if (!tower.targets.includes(e.type)) return false;
       const dx = e.x - tower.px, dy = e.y - tower.py;
       return Math.sqrt(dx * dx + dy * dy) <= tower.range;
     });
@@ -1075,12 +1083,11 @@ function endGame() {
 /* -------------------------------------------------------
    GO TO NEXT GAME
    Called by "Next Game →" button on results screen.
-   Update the href below to point to your Game 3 file.
 ------------------------------------------------------- */
 function goNext() {
   const passed = localStorage.getItem('game2_passed') === 'true';
   if (passed) {
-    window.location.href = '../games/game3.html';   // ← connect to Game 3 here
+    window.location.href = '../games/game3.html';
   } else {
     showToast('💡 Survive all 5 waves to unlock Game 3!');
   }
@@ -1093,7 +1100,10 @@ function goNext() {
    once the game screen becomes visible.
 ------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Canvas and input are wired inside startGame() via setTimeout
+  // Canvas and input are wired inside startGame() via double rAF
   // so the game screen is visible and has real pixel dimensions first.
   // Nothing else needed here.
 });
+
+
+// This program was made to some degree with Claude. Human coding was added for effects and to ensure accuracy.
