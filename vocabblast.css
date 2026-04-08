@@ -5,7 +5,9 @@
    and results screens, animations, HUD, canvas
    layout, and word prompt bar.
 ===================================================== */
-
+html {
+  font-size: 20px;
+}
 
 /* -------------------------------------------------------
    CSS VARIABLES & RESET
