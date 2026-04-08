@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Defense Quiz | ATCKR</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quiz2.css">
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div id="app">
+
+  <!-- ===== INTRO SCREEN ===== -->
+  <div id="s-intro" class="screen active">
+    <div class="term-badge">ATCKR // CHECKPOINT_02</div>
+    <div class="intro-icon">🛡️</div>
+    <h1 class="intro-title">Defense <span class="cyan">Quiz</span></h1>
+    <p class="intro-sub">You survived Cybertower Frenzy — now prove you know<br>how to defend against real cyber threats!</p>
+    <div class="rules-grid">
+      <div class="rule-box"><span class="rule-icon">❓</span><div class="rule-text">5 questions</div></div>
+      <div class="rule-box"><span class="rule-icon">💡</span><div class="rule-text">Hints if stuck</div></div>
+      <div class="rule-box"><span class="rule-icon">🔁</span><div class="rule-text">Retry until correct</div></div>
+      <div class="rule-box"><span class="rule-icon">🔓</span><div class="rule-text">5/5 unlocks Level 3</div></div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">START QUIZ →</button>
+  </div>
+
+  <!-- ===== QUIZ SCREEN ===== -->
+  <div id="s-quiz" class="screen">
+    <div class="quiz-topbar">
+      <div class="q-num" id="qNum">Q1 / 5</div>
+      <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="q-score" id="qScore">0 / 5</div>
+    </div>
+    <div class="q-card" id="qCard">
+      <div class="q-img" id="qImg">🛡️</div>
+      <div class="q-caption" id="qCaption">// SCENARIO</div>
+      <div class="q-text" id="qText">Loading...</div>
+      <div class="choices" id="choices"></div>
+      <button class="hint-btn" id="hintBtn" onclick="showHint()">💡 Need a hint?</button>
+      <div class="hint-box" id="hintBox"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ===== COMPLETE SCREEN ===== -->
+  <div id="s-complete" class="screen">
+    <div class="comp-icon">🏆</div>
+    <div class="term-badge">CHECKPOINT_02 // CLEARED</div>
+    <h2 class="comp-title">Quiz Complete!</h2>
+    <div class="comp-score">5 <span>/</span> 5</div>
+    <p class="comp-sub">Perfect score! You know how to defend against cyber threats!</p>
+    <div class="def-card">
+      <div class="def-label">// WHAT YOU LEARNED</div>
+      <div class="def-word">Cyber Defense</div>
+      <div class="def-text">Protecting your computer means using the right tool for each threat — firewalls for common attacks, antivirus for hidden spyware, VPNs for ransomware, and software updates to patch exploits.</div>
+      <div class="def-rules">
+        <div class="def-rule"><span class="cyan">✓</span> Use a Firewall to block common threats like worms</div>
+        <div class="def-rule"><span class="cyan">✓</span> Antivirus reveals and removes hidden spyware</div>
+        <div class="def-rule"><span class="cyan">✓</span> Keep software updated — outdated apps are easy targets</div>
+        <div class="def-rule"><span class="cyan">✓</span> A VPN encrypts your data to stop ransomware attacks</div>
+      </div>
+    </div>
+    <button class="btn-start" onclick="goToLevel3()">PROCEED TO LEVEL 3 →</button>
+  </div>
+
+</div>
+<script src="quiz2.js"></script>
+</body>
+</html>

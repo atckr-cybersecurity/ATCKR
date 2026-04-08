@@ -1,0 +1,146 @@
+/* =====================================================
+   ATCKR — Cyber Defense Quiz (Checkpoint 2)
+   Stylesheet: quiz2.css
+   Matches cyberdefense.css theme — dark navy,
+   cyan #00e5ff accent, Share Tech Mono font
+   ===================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0d1b2a;
+  --surface: #0f2235;
+  --card:    #112438;
+  --border:  rgba(0,229,255,0.18);
+  --cyan:    #00e5ff;
+  --green:   #39ff14;
+  --red:     #ff4757;
+  --amber:   #ffd32a;
+  --text:    #e0f7fa;
+  --muted:   #6b8fa8;
+  --mono:    'Share Tech Mono', monospace;
+  --display: 'Fredoka One', cursive;
+  --body:    'Nunito', sans-serif;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: var(--body);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+canvas#particles {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.28;
+}
+
+#app {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 16px 48px;
+}
+
+.screen { display: none; width: 100%; max-width: 560px; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* Badge */
+.term-badge {
+  font-family: var(--mono); font-size: 0.7rem; color: var(--cyan);
+  letter-spacing: 0.15em; border: 1px solid var(--border);
+  padding: 4px 14px; border-radius: 4px; margin-bottom: 16px; margin-top: 20px;
+}
+
+/* Intro */
+.intro-icon { font-size: 3.8rem; margin-bottom: 10px; animation: floatBob 3s ease-in-out infinite; }
+.intro-title { font-family: var(--display); font-size: clamp(2.2rem,8vw,3.2rem); color: #fff; margin-bottom: 8px; line-height: 1; animation: fadeUp 0.4s ease both; }
+.intro-title .cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0,229,255,0.5); }
+.intro-sub { font-size: 0.88rem; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 24px; animation: fadeUp 0.4s 0.1s ease both; }
+.cyan { color: var(--cyan); }
+
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-bottom: 24px; animation: fadeUp 0.4s 0.2s ease both; }
+.rule-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 8px; }
+.rule-icon { font-size: 1.2rem; }
+.rule-text { font-size: 0.78rem; color: var(--text); }
+
+.btn-start {
+  background: var(--cyan); color: #001a22; border: none;
+  font-family: var(--mono); font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.1em; padding: 14px 40px; border-radius: 6px;
+  cursor: pointer; transition: all 0.2s;
+  animation: fadeUp 0.4s 0.3s ease both;
+  position: relative; overflow: hidden;
+}
+.btn-start::after { content:''; position:absolute; inset:0; background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.15) 50%,transparent 70%); animation:shimmer 2.5s ease infinite; }
+.btn-start:hover { background: #00b8cc; transform: scale(1.04); box-shadow: 0 0 24px rgba(0,229,255,0.4); }
+
+/* Quiz topbar */
+.quiz-topbar { width: 100%; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-top: 16px; }
+.q-num  { font-family: var(--mono); font-size: 0.75rem; color: var(--cyan); letter-spacing: 0.08em; white-space: nowrap; }
+.prog-bg { flex: 1; height: 3px; background: var(--surface); border-radius: 2px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--cyan); border-radius: 2px; transition: width 0.4s ease; box-shadow: 0 0 6px rgba(0,229,255,0.5); }
+.q-score { font-family: var(--mono); font-size: 0.75rem; color: var(--amber); white-space: nowrap; }
+
+/* Question card */
+.q-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; animation: cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.q-img { font-size: 4.5rem; display: block; text-align: center; margin-bottom: 6px; animation: floatBob 3s ease-in-out infinite; }
+.q-img img { width: 100%; max-width: 300px; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: block; margin: 0 auto 8px; }
+.q-caption { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; text-align: center; margin-bottom: 12px; }
+.q-text { font-family: var(--body); font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.55; margin-bottom: 16px; text-align: center; }
+
+/* Choices */
+.choices { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+.choice-btn {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 11px 14px; color: var(--text); font-family: var(--mono); font-size: 0.82rem;
+  text-align: left; cursor: pointer; transition: all 0.18s;
+  display: flex; align-items: flex-start; gap: 9px; line-height: 1.4; width: 100%;
+}
+.choice-btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); background: rgba(0,229,255,0.05); transform: translateX(4px); }
+.choice-letter { width: 20px; height: 20px; border-radius: 3px; background: rgba(0,229,255,0.12); color: var(--cyan); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; margin-top: 1px; }
+.choice-btn:hover:not(:disabled) .choice-letter { background: var(--cyan); color: #000; }
+.choice-btn.correct { border-color: var(--green); background: rgba(57,255,20,0.08); color: var(--green); animation: correctPop 0.4s ease; }
+.choice-btn.correct .choice-letter { background: var(--green); color: #000; }
+.choice-btn.wrong { border-color: var(--red); background: rgba(255,71,87,0.08); color: var(--red); animation: shake 0.4s ease; }
+.choice-btn.wrong .choice-letter { background: var(--red); color: #fff; }
+.choice-btn:disabled { cursor: not-allowed; opacity: 0.45; }
+
+/* Hint */
+.hint-btn { background: transparent; border: 1px solid rgba(255,211,42,0.3); color: var(--amber); font-family: var(--mono); font-size: 0.75rem; padding: 6px 12px; border-radius: 5px; cursor: pointer; transition: all 0.2s; margin-bottom: 7px; }
+.hint-btn:hover { background: rgba(255,211,42,0.07); border-color: var(--amber); }
+.hint-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.hint-box { display: none; background: rgba(255,211,42,0.06); border: 1px solid rgba(255,211,42,0.22); border-radius: 7px; padding: 9px 12px; font-size: 0.8rem; color: var(--amber); line-height: 1.55; margin-bottom: 8px; }
+.hint-box.show { display: block; animation: fadeUp 0.3s ease; }
+
+/* Feedback */
+.feedback { display: none; text-align: center; font-family: var(--body); font-size: 0.88rem; font-weight: 800; padding: 9px; border-radius: 7px; }
+.feedback.ok { display: block; color: var(--green); background: rgba(57,255,20,0.07); border: 1px solid rgba(57,255,20,0.2); animation: fadeUp 0.3s ease; }
+.feedback.no { display: block; color: var(--red); background: rgba(255,71,87,0.07); border: 1px solid rgba(255,71,87,0.2); animation: fadeUp 0.3s ease; }
+
+/* Complete */
+.comp-icon { font-size: 4.5rem; margin-bottom: 10px; animation: trophyDrop 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+.comp-title { font-family: var(--display); font-size: 2.2rem; color: var(--cyan); margin: 8px 0 4px; text-shadow: 0 0 20px rgba(0,229,255,0.4); }
+.comp-score { font-family: var(--display); font-size: 3.5rem; color: #fff; margin: 5px 0 8px; animation: scoreIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.comp-score span { color: var(--muted); font-size: 2.2rem; }
+.comp-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 18px; line-height: 1.6; text-align: center; }
+
+.def-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--cyan); border-radius: 10px; padding: 16px; margin-bottom: 20px; text-align: left; }
+.def-label { font-family: var(--mono); font-size: 0.68rem; color: var(--cyan); letter-spacing: 0.12em; margin-bottom: 7px; }
+.def-word { font-family: var(--display); font-size: 1.5rem; color: #fff; margin-bottom: 7px; }
+.def-text { font-size: 0.83rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+.def-rules { display: flex; flex-direction: column; gap: 5px; }
+.def-rule { font-size: 0.82rem; color: var(--text); display: flex; gap: 8px; line-height: 1.4; }
+
+/* Animations */
+@keyframes floatBob { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+@keyframes cardIn { from{opacity:0;transform:scale(.94) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)} }
+@keyframes correctPop { 0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)} }
+@keyframes shake { 0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)} }
+@keyframes trophyDrop { from{transform:scale(0) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1} }
+@keyframes scoreIn { from{transform:scale(1.5);opacity:0}to{transform:scale(1);opacity:1} }
+@keyframes shimmer { 0%{transform:translateX(-100%)}100%{transform:translateX(100%)} }
+
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation: none !important; transition: none !important; } }
