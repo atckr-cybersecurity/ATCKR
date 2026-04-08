@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phishing Quiz | ATCKR</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quiz1.css">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div id="app">
+
+  <!-- ===== INTRO SCREEN ===== -->
+  <div id="s-intro" class="screen active">
+    <div class="terminal-badge">ATCKR // CHECKPOINT_01</div>
+    <div class="intro-icon">🛡️</div>
+    <h1 class="intro-title">Phishing <span class="green">Quiz</span></h1>
+    <p class="intro-sub">You finished Level 1 — now prove what you learned.<br>Answer all 5 questions correctly to unlock Level 2.</p>
+    <div class="rules-grid">
+      <div class="rule-box">
+        <div class="rule-icon">❓</div>
+        <div class="rule-text">5 questions</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-icon">💡</div>
+        <div class="rule-text">Hints if you're stuck</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-icon">🔁</div>
+        <div class="rule-text">Retry until correct</div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-icon">🔓</div>
+        <div class="rule-text">5/5 unlocks Level 2</div>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">
+      <span class="btn-text">START QUIZ</span>
+      <span class="btn-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- ===== QUIZ SCREEN ===== -->
+  <div id="s-quiz" class="screen">
+
+    <!-- Top bar -->
+    <div class="quiz-topbar">
+      <div class="q-counter" id="qCounter">Q1 / 5</div>
+      <div class="q-progress-wrap">
+        <div class="q-progress-bar" id="qProgressBar" style="width:0%"></div>
+      </div>
+      <div class="q-score" id="qScore">0 / 5</div>
+    </div>
+
+    <!-- Question card -->
+    <div class="q-card" id="qCard">
+
+      <!-- Image -->
+      <div class="q-img-wrap">
+        <div class="q-img" id="qImg">🎣</div>
+        <div class="q-img-caption" id="qCaption">Example scenario</div>
+      </div>
+
+      <!-- Question text -->
+      <div class="q-text" id="qText">Loading question...</div>
+
+      <!-- Answer choices -->
+      <div class="choices" id="choices"></div>
+
+      <!-- Hint area -->
+      <div class="hint-area" id="hintArea">
+        <button class="btn-hint" id="btnHint" onclick="showHint()">
+          💡 Need a hint?
+        </button>
+        <div class="hint-box" id="hintBox"></div>
+      </div>
+
+      <!-- Feedback message -->
+      <div class="feedback-msg" id="feedbackMsg"></div>
+
+    </div>
+
+  </div>
+
+  <!-- ===== COMPLETE SCREEN ===== -->
+  <div id="s-complete" class="screen">
+    <div class="complete-icon" id="completeIcon">🏆</div>
+    <div class="terminal-badge">CHECKPOINT_01 // CLEARED</div>
+    <h2 class="complete-title">Quiz Complete!</h2>
+    <div class="complete-score">5 <span>/</span> 5</div>
+    <p class="complete-sub">You passed with a perfect score.<br>You now understand phishing fundamentals!</p>
+
+    <!-- Phishing definition recap -->
+    <div class="def-recap">
+      <div class="def-recap-label">// WHAT YOU LEARNED</div>
+      <div class="def-recap-word">Phishing</div>
+      <div class="def-recap-text">When scammers pretend to be someone you trust to steal your info or money through fake links, fake urgency, or fake prizes.</div>
+      <div class="def-recap-rules">
+        <div class="def-rule"><span class="green">✓</span> Never click links in unexpected texts</div>
+        <div class="def-rule"><span class="green">✓</span> Check the URL — fake sites use tricks like "amaz0n"</div>
+        <div class="def-rule"><span class="green">✓</span> Urgency is a red flag — real companies don't panic you</div>
+        <div class="def-rule"><span class="green">✓</span> Never share your password with anyone</div>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="goToLevel2()">
+      <span class="btn-text">PROCEED TO LEVEL 2</span>
+      <span class="btn-arrow">→</span>
+    </button>
+  </div>
+
+</div>
+
+<script src="quiz1.js"></script>
+</body>
+</html>

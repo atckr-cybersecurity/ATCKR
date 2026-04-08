@@ -1,0 +1,590 @@
+/* =====================================================
+   ATCKR — Phishing Quiz (Checkpoint 1)
+   Stylesheet: quiz1.css
+   Matches the dark ATCKR hacker theme with
+   Share Tech Mono font and green #52d63a accents
+   ===================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:       #0a0a0a;
+  --surface:  #111111;
+  --card:     #161616;
+  --border:   #1e3a1e;
+  --green:    #52d63a;
+  --green-dk: #3db829;
+  --red:      #ef4444;
+  --amber:    #f59e0b;
+  --text:     #e0e0e0;
+  --muted:    #555555;
+  --mono:     'Share Tech Mono', monospace;
+  --display:  'Fredoka One', cursive;
+  --body:     'Nunito', sans-serif;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: var(--mono);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Particle canvas background */
+canvas#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.25;
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 48px;
+}
+
+/* Screens */
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 560px;
+  flex-direction: column;
+  align-items: center;
+}
+.screen.active {
+  display: flex;
+}
+
+
+/* =====================================================
+   INTRO SCREEN
+   ===================================================== */
+
+.terminal-badge {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--green);
+  letter-spacing: 0.15em;
+  border: 1px solid var(--border);
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  margin-top: 24px;
+  animation: fadeUp 0.4s ease both;
+}
+
+.intro-icon {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  animation: floatBob 3s ease-in-out infinite;
+}
+
+.intro-title {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 8vw, 3.5rem);
+  color: #fff;
+  margin-bottom: 10px;
+  animation: fadeUp 0.4s 0.1s ease both;
+  line-height: 1;
+}
+
+.intro-title .green {
+  color: var(--green);
+}
+
+.intro-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  animation: fadeUp 0.4s 0.2s ease both;
+}
+
+/* 4 rule boxes in a 2x2 grid */
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 28px;
+  animation: fadeUp 0.4s 0.3s ease both;
+}
+
+.rule-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rule-icon {
+  font-size: 1.4rem;
+}
+
+.rule-text {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+/* Start button */
+.btn-start {
+  background: var(--green);
+  color: #000;
+  border: none;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 16px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+  animation: fadeUp 0.4s 0.4s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-start::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  animation: shimmer 2.5s ease infinite;
+}
+
+.btn-start:hover {
+  background: var(--green-dk);
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(82, 214, 58, 0.4);
+}
+
+.btn-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.btn-start:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+
+/* =====================================================
+   QUIZ SCREEN
+   ===================================================== */
+
+.quiz-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding-top: 16px;
+}
+
+.q-counter {
+  font-size: 0.78rem;
+  color: var(--green);
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+}
+
+.q-progress-wrap {
+  flex: 1;
+  height: 4px;
+  background: var(--surface);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.q-progress-bar {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 8px rgba(82, 214, 58, 0.5);
+}
+
+.q-score {
+  font-size: 0.78rem;
+  color: var(--amber);
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+}
+
+/* Question card */
+.q-card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Image area */
+.q-img-wrap {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.q-img {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 8px;
+  animation: floatBob 3s ease-in-out infinite;
+  line-height: 1;
+}
+
+/* For actual image files */
+.q-img img {
+  width: 100%;
+  max-width: 320px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.q-img-caption {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* Question text */
+.q-text {
+  font-family: var(--body);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* Answer choices */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.choice-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(82, 214, 58, 0.05);
+  transform: translateX(4px);
+}
+
+/* Letter badge on each choice */
+.choice-letter {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: var(--border);
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.choice-btn:hover:not(:disabled) .choice-letter {
+  background: var(--green);
+  color: #000;
+}
+
+/* Correct answer state */
+.choice-btn.correct {
+  border-color: var(--green);
+  background: rgba(82, 214, 58, 0.12);
+  color: var(--green);
+  animation: correctPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.choice-btn.correct .choice-letter {
+  background: var(--green);
+  color: #000;
+}
+
+/* Wrong answer state */
+.choice-btn.wrong {
+  border-color: var(--red);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--red);
+  animation: shake 0.4s ease;
+}
+
+.choice-btn.wrong .choice-letter {
+  background: var(--red);
+  color: #fff;
+}
+
+.choice-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Hint section */
+.hint-area {
+  margin-bottom: 12px;
+}
+
+.btn-hint {
+  background: transparent;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--amber);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.btn-hint:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--amber);
+}
+
+.btn-hint:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Hint text box */
+.hint-box {
+  display: none;
+  margin-top: 10px;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-size: 0.82rem;
+  color: var(--amber);
+  line-height: 1.55;
+  animation: fadeUp 0.3s ease;
+}
+
+.hint-box.show {
+  display: block;
+}
+
+/* Feedback message */
+.feedback-msg {
+  display: none;
+  text-align: center;
+  font-family: var(--body);
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 10px;
+  border-radius: 8px;
+  animation: fadeUp 0.3s ease;
+}
+
+.feedback-msg.show-correct {
+  display: block;
+  color: var(--green);
+  background: rgba(82, 214, 58, 0.08);
+  border: 1px solid rgba(82, 214, 58, 0.2);
+}
+
+.feedback-msg.show-wrong {
+  display: block;
+  color: var(--red);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+
+/* =====================================================
+   COMPLETE SCREEN
+   ===================================================== */
+
+#s-complete {
+  text-align: center;
+  padding-top: 24px;
+  gap: 0;
+}
+
+.complete-icon {
+  font-size: 5rem;
+  margin-bottom: 12px;
+  animation: trophyDrop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.complete-title {
+  font-family: var(--display);
+  font-size: 2.4rem;
+  color: var(--green);
+  margin: 10px 0 6px;
+}
+
+.complete-score {
+  font-family: var(--display);
+  font-size: 4rem;
+  color: #fff;
+  margin: 6px 0 10px;
+  animation: scoreIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.complete-score span {
+  color: var(--muted);
+  font-size: 2.5rem;
+}
+
+.complete-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Definition recap card */
+.def-recap {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.def-recap-label {
+  font-size: 0.68rem;
+  color: var(--green);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.def-recap-word {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.def-recap-text {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.def-recap-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.def-rule {
+  font-size: 0.82rem;
+  color: var(--text);
+  display: flex;
+  gap: 8px;
+}
+
+.green {
+  color: var(--green);
+}
+
+
+/* =====================================================
+   KEYFRAME ANIMATIONS
+   ===================================================== */
+
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.94) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes correctPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+@keyframes trophyDrop {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes scoreIn {
+  from { transform: scale(1.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
