@@ -407,16 +407,9 @@ function update(dt) {
 
     for (const v of G.viruses) {
       if (!v.alive) continue;
-      // --- Fixes to make hitbox as textbox collision 
-      if (
-        v.bubble &&
-        b.x > v.bubble.x &&
-        b.x < v.bubble.x + v.bubble.w &&
-        b.y > v.bubble.y &&
-        b.y < v.bubble.y + v.bubble.h)  {
+      if (Math.abs(b.x - v.xDraw) < 42 && Math.abs(b.y - v.y) < 32) {
         b.alive = false;
         v.alive = false;
-
         if (v.isCorrect) {
           // ✅ Correct hit
           G.correct++;
@@ -520,7 +513,7 @@ function draw() {
     ctx.fillText(v.emoji, vx, v.y - 2);
 
     // Definition text bubble
-    v.bubble = drawBubble(vx, v.y + 24, v.text, v.isCorrect);
+    drawBubble(vx, v.y + 24, v.text, v.isCorrect);
   }
 
   // --- Bullets ---
@@ -556,24 +549,17 @@ function drawBubble(cx, topY, text, isCorrect) {
   const bh    = lines.length * lh + pad * 2;
   const bw    = maxW + pad * 2;
 
-  const x = cx -bw / 2;
-  const y = topY;
-
   ctx.fillStyle   =  'rgba(10,20,35,0.9)' ;
   ctx.strokeStyle = 'rgba(0,299,255,0.4)' ;
   ctx.lineWidth   = 1;
+  rr(cx - bw / 2, topY, bw, bh, 8);
+  ctx.fill(); ctx.stroke();
 
-  rr(x, y, bw, bh, 8);
-  ctx.fill(); 
-  ctx.stroke();
-
-  ctx.fillStyle    = '#e2e8f0';
+  ctx.fillStyle    =  '#e2e8f0';
   ctx.font         = '600 0.6rem Nunito, sans-serif';
   ctx.textAlign    = 'center';
   ctx.textBaseline = 'top';
   lines.forEach((line, i) => ctx.fillText(line, cx, topY + pad + i * lh));
-
-  return {x, y, w: bw, h: bh };
 }
 
 /* Draws the stylised computer/monitor player at the bottom */
